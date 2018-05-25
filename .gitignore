@@ -41,3 +41,5 @@ bin
 # Maven
 log/
 target/
+
+.env
