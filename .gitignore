@@ -43,3 +43,4 @@ log/
 target/
 
 .env
+.md/
