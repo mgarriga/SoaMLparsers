@@ -25,7 +25,7 @@ Commented variables (i.e. line starts with `#` ) are set with default value. Unc
 
 #### Database Variables:
 ```
-DATABASE_HOST: Host of the Database (default 192.168.0.1)
+DATABASE_HOST: Host of the Database (default 127.0.0.1)
 DATABASE_PORT: Port of the Database (default 27017)
 
 DATABASE_NAME: Name of the Database (default KB)

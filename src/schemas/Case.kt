@@ -28,7 +28,7 @@ data class Case(val problem: Interface, var solution: String = "") {
 
 fun getDatabase(name: String): MongoDatabase {
     println("Connecting to Mongo")
-    val host = dotenv["DATABASE_HOST"] ?: "192.168.0.1"
+    val host = dotenv["DATABASE_HOST"] ?: "127.0.0.1"
     val port = dotenv["DATABASE_PORT"]?.toInt() ?: 27017
     val client = KMongo.createClient(host = host, port = port)
     return client.getDatabase(name)
