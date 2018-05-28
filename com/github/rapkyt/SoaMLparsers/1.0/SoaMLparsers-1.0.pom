@@ -128,7 +128,6 @@
                     <merge>true</merge>
                     <includes>
                         <include>**/*</include>
-                        <include>./../lib/*</include>
                     </includes>
                     <!-- github repo name -->
                     <repositoryName>SoaMLparsers</repositoryName>
