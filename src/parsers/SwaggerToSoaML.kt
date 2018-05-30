@@ -217,7 +217,7 @@ class SwaggerToSoaML(val path: String, private var api: Swagger? = null) {
 private val dotenv = dotenv { directory = "./" }
 
 
-fun getCasesFromOas(jsonPath: String): MutableList<Case> {
+fun getCasesFromOas(jsonPath: String): ArrayList<Case> {
     val cases = mutableListOf<Case>()
     var failed = mutableSetOf<String>()
     var failedCount = 0
@@ -228,7 +228,7 @@ fun getCasesFromOas(jsonPath: String): MutableList<Case> {
             println("${failedCount} of ${index} failed. Now processing ${file.absolutePath}")
             val swaggerToSoaML = SwaggerToSoaML(file.absolutePath)
             val swaggerInterface = swaggerToSoaML.getInterface()
-            val case = Case(swaggerInterface, swaggerInterface.name)
+            val case = Case(swaggerInterface, "${swaggerInterface.name} - ${file.name}")
             cases.add(case)
         } catch (e: Exception) {
             var message = e.toString()
@@ -244,7 +244,7 @@ fun getCasesFromOas(jsonPath: String): MutableList<Case> {
         }
     }
     println("${index - failedCount} of ${index} Interfaces Created, ${failedCount} failed")
-    return cases
+    return ArrayList(cases)
 }
 
 
@@ -255,7 +255,10 @@ fun loadOas() {
     if (insertOasInDB) {
         val caseCollection = getCaseCollection()
         val cases = getCasesFromOas(path)
-        caseCollection.insertMany(cases)
+        cases.forEach {
+            println("writing ${it.solution}")
+            caseCollection.insertOne(it)
+        }
         println("Insert succefull now there are ${caseCollection.count()} Cases in the KB")
     }
 }

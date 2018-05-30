@@ -57,3 +57,22 @@ If you want to load them both at once, run the main at schemas.Case.
 
 In both scenarios you must define the paths and the boolean variable to insert them into the DataBase.
  
+ 
+ ## Installation
+ 
+ Add this to your pom.xml
+ 
+ In `repositories` section:
+ ```xml
+<repository>
+  <id>SoaMLparsers-mvn-repo</id>
+  <url>https://raw.github.com/rapkyt/SoaMLparsers/mvn-repo/</url>
+  <snapshots>
+      <enabled>true</enabled>
+    <updatePolicy>always</updatePolicy>
+  </snapshots>
+</repository>
+```
+
+and then this dependency:
+...
