@@ -13,6 +13,7 @@ import io.swagger.models.properties.Property
 import io.swagger.models.properties.RefProperty
 import io.swagger.models.properties.UntypedProperty
 import io.swagger.parser.SwaggerParser
+import org.bson.BsonSerializationException
 import schemas.Case
 import schemas.getCaseCollection
 import java.io.File
@@ -174,12 +175,12 @@ class SwaggerToSoaML(val path: String, private var api: Swagger? = null) {
             val type: Type? =
                 getParameterType(responseSchema, "${operation.operationId ?: path} - Response: ${response.key}")
             if (response.key.startsWith("2")) {
-                parameters.clear()
+                val outputParameters = mutableListOf<Parameter>()
                 if (type != null) {
                     val apiParameter = Parameter(response.key, type)
-                    parameters.add(apiParameter)
+                    outputParameters.add(apiParameter)
                 }
-                output = Output("response", parameters)
+                output = Output("response", outputParameters as ArrayList<Parameter>)
                 apiResponse = Response("response", type)
             } else {
                 val fault = Fault(response.key, type)
@@ -255,11 +256,24 @@ fun loadOas() {
     if (insertOasInDB) {
         val caseCollection = getCaseCollection()
         val cases = getCasesFromOas(path)
+        val failed = mutableListOf<Case>()
         cases.forEach {
             println("writing ${it.solution}")
-            caseCollection.insertOne(it)
+            try {
+                caseCollection.insertOne(it)
+            } catch (e: BsonSerializationException) {
+                failed.add(it)
+            }
         }
         println("Insert succefull now there are ${caseCollection.count()} Cases in the KB")
+        println("${failed.size} Cases failed due to exceeding the size allowed for the Mongo document (16 MB)")
+        val showErrors = dotenv["VERBOSE"] == "true"
+        if (showErrors) {
+            println("Cases that failed: ")
+            failed.forEach { print("${it.solution}, ") }
+            print("\n")
+        }
+
     }
 }
 

@@ -48,6 +48,12 @@ INSERT_WSDL_IN_DB: Choose if you want to insert the Cases in the path into de Da
 ```
 
 
+#### Runtime Environment Variables
+```
+VERBOSE: Choose if you want to run it in verbose mode (default false)
+```
+
+
 ## Running
 
 If you want to load in the Database only the OAS or the WSDL you must run the main at parsers.SwaggerToSOaML or 
@@ -74,5 +80,11 @@ In both scenarios you must define the paths and the boolean variable to insert t
 </repository>
 ```
 
-and then this dependency:
-...
+In `dependencies` section:
+```xml
+<dependency>
+  <groupId>com.github.rapkyt</groupId>
+  <artifactId>SoaMLparsers</artifactId>
+  <version>1.0</version>
+</dependency>
+```

@@ -12,6 +12,7 @@ import parsers.loadWsdl
 
 val checker = InterfacesCompatibilityChecker()
 private val dotenv = dotenv { directory = "./" }
+private val verbose = dotenv["VERBOSE"] == "true"
 
 
 data class Case(val problem: Interface, var solution: String = "") {
@@ -27,7 +28,8 @@ data class Case(val problem: Interface, var solution: String = "") {
 
 
 fun getDatabase(name: String): MongoDatabase {
-    println("Connecting to Mongo")
+    if (verbose)
+        println("Connecting to Mongo")
     val host = dotenv["DATABASE_HOST"] ?: "127.0.0.1"
     val port = dotenv["DATABASE_PORT"]?.toInt() ?: 27017
     val client = KMongo.createClient(host = host, port = port)
@@ -39,7 +41,8 @@ fun getCaseCollection(): MongoCollection<Case> {
     val databaseName = dotenv["DATABASE_NAME"] ?: "KB"
     val database = getDatabase(databaseName)
     val caseCollection = database.getCollection<Case>()
-    println("Connection with Mongo established.")
+    if (verbose)
+        println("Connection with Mongo established.")
     return caseCollection
 }
 
