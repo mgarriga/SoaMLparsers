@@ -88,3 +88,14 @@ In `dependencies` section:
   <version>1.0</version>
 </dependency>
 ```
+
+## Exporting new changes
+
+To upload the new changes into the maven repository you must execute
+
+```bash
+$ mvn clean deploy
+```
+
+This will clean, compile, deploy into an internal maven repo and push that maven repo into a separate branch in the
+GitHub repo so can be installed intro other projects
