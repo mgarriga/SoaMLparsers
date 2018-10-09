@@ -5,10 +5,8 @@ import edu.giisco.SoaML.metamodel.Response
 import io.github.cdimascio.dotenv.dotenv
 import io.swagger.models.*
 import io.swagger.models.Operation
+import io.swagger.models.parameters.AbstractSerializableParameter
 import io.swagger.models.parameters.BodyParameter
-import io.swagger.models.parameters.HeaderParameter
-import io.swagger.models.parameters.PathParameter
-import io.swagger.models.parameters.QueryParameter
 import io.swagger.models.properties.Property
 import io.swagger.models.properties.RefProperty
 import io.swagger.models.properties.UntypedProperty
@@ -41,7 +39,9 @@ class SwaggerToSoaML(val path: String, private var api: Swagger? = null) {
         return when (property) {
             is io.swagger.models.properties.ArrayProperty -> {
                 val arrayType = getType(property.items, "$key.items")
-                ArrayType(arrayType)
+                val type = ArrayType(arrayType)
+                type.setName(key)
+                type
             }
             is io.swagger.models.properties.ObjectProperty -> {
                 val attributes = mutableListOf<Attribute>()
@@ -67,7 +67,13 @@ class SwaggerToSoaML(val path: String, private var api: Swagger? = null) {
         }
     }
 
-    fun getSimpleType(type: String, format: String?, schema: ModelImpl? = null, properties: Property? = null): Type {
+    fun getSimpleType(
+        type: String,
+        format: String?,
+        schema: ModelImpl? = null,
+        properties: Property? = null,
+        name: String = ""
+    ): Type {
         return when (type) {
             "integer" ->
                 when (format) {
@@ -101,7 +107,9 @@ class SwaggerToSoaML(val path: String, private var api: Swagger? = null) {
             }
             "array" -> {
                 val arrayType = getType(properties!!)
-                ArrayType(arrayType)
+                val returnType = ArrayType(arrayType)
+                returnType.setName(name)
+                returnType
             }
             else -> throw IllegalArgumentException("Type '${type}' is not supported")
         }
@@ -137,7 +145,9 @@ class SwaggerToSoaML(val path: String, private var api: Swagger? = null) {
             }
             is ArrayModel -> {
                 val arrayType = getType(schema.items, "$key.items")
-                ArrayType(arrayType)
+                val type = ArrayType(arrayType)
+                type.setName("response")
+                type
             }
             is ModelImpl -> {
                 if (schema.type == null)
@@ -156,11 +166,14 @@ class SwaggerToSoaML(val path: String, private var api: Swagger? = null) {
         val parameters = mutableListOf<Parameter>()
         operation.parameters.forEach { parameter ->
             val type = when (parameter) {
-                is HeaderParameter -> getSimpleType(parameter.type, parameter.format, properties = parameter.items)
-                is QueryParameter -> getSimpleType(parameter.type, parameter.format, properties = parameter.items)
-                is PathParameter -> getSimpleType(parameter.type, parameter.format, properties = parameter.items)
                 is BodyParameter ->
                     getParameterType(parameter.schema, "${operation.operationId ?: path}.${parameter.name}")
+                is AbstractSerializableParameter<*> -> getSimpleType(
+                    parameter.getType(),
+                    parameter.getFormat(),
+                    properties = parameter.getItems(),
+                    name = parameter.name
+                )
                 else -> stringType
             }
             val apiParameter = Parameter(parameter.name, type)
