@@ -1,12 +1,12 @@
 package parsers
 
 import edu.giisco.SoaML.metamodel.*
-import edu.giisco.SoaML.metamodel.Parameter
 import edu.giisco.SoaML.metamodel.Response
 import io.github.cdimascio.dotenv.dotenv
 import io.swagger.models.*
 import io.swagger.models.Operation
-import io.swagger.models.parameters.*
+import io.swagger.models.parameters.AbstractSerializableParameter
+import io.swagger.models.parameters.BodyParameter
 import io.swagger.models.properties.Property
 import io.swagger.models.properties.RefProperty
 import io.swagger.models.properties.UntypedProperty
