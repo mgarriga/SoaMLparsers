@@ -694,10 +694,6 @@ public class SemanticInterfaceCompatibility {
 				double[][] matricesMultiplicadas=multiplicarEscalares(matrizNombresParametros, matrizTipoParametros);
 				int[][] resultParam = HungarianAlgorithm.hgAlgorithm(matricesMultiplicadas, "max");
 				//System.out.println(requiredOperation.getName()+" "+ candidateOperation.getName());
-				imprimirMatriz(matrizNombresParametros);
-				imprimirMatriz(matrizTipoParametros);
-				imprimirMatriz(matricesMultiplicadas);
-				imprimirMatriz(resultParam);
 				double sum =0;
 				for (int j=0; j<resultParam.length; j++)
 				{
@@ -773,17 +769,10 @@ public class SemanticInterfaceCompatibility {
 				double[][] matrizTipoParametros;
 				matrizNombresParametros= calcularCompatibilidadNombreParametros(requiredOperation.getOutput().getParameters(), candidateOperation.getOutput().getParameters());
 				matrizTipoParametros = getMatrizCompatibleParameters(requiredOperation.getOutput().getParameters(),candidateOperation.getOutput().getParameters());
-				imprimirMatriz(matrizNombresParametros);
-				//System.out.println("---------------------------------");
-				imprimirMatriz(matrizTipoParametros);
 				double[][] matricesMultiplicadas=multiplicarEscalares(matrizNombresParametros, matrizTipoParametros);
 
 				int[][] resultParam = HungarianAlgorithm.hgAlgorithm(matricesMultiplicadas, "max");
 				//System.out.println(requiredOperation.getName()+" "+ candidateOperation.getName());
-				imprimirMatriz(matrizNombresParametros);
-				imprimirMatriz(matrizTipoParametros);
-				imprimirMatriz(matricesMultiplicadas);
-				imprimirMatriz(resultParam);
 				double sum =0;
 				for (int j=0; j<resultParam.length; j++)
 				{
@@ -848,35 +837,15 @@ public class SemanticInterfaceCompatibility {
 				recomendations.clone();
 				return ret;
 			}
-			
-			private static void imprimirMatriz(int[][] matricesMultiplicadas) {
-				for(int i=0; i<matricesMultiplicadas.length ; i++){
-					for(int j=0; j<matricesMultiplicadas[i].length ; j++){
-						System.out.print(matricesMultiplicadas[i][j]+"  ");
-					}
-					//System.out.println();
-				}
-				
-			}
 
-			private static void imprimirMatriz(double[][] matricesMultiplicadas) {
-				for(int i=0; i<matricesMultiplicadas.length ; i++){
-					for(int j=0; j<matricesMultiplicadas[i].length ; j++){
-						System.out.print(matricesMultiplicadas[i][j]+"  ");
-					}
-					//System.out.println();
-				}
-				
-			}
-
-//			public static double fieldCaseValue(Operation requiredOperation, Operation candidateOperation) 
+//			public static double fieldCaseValue(Operation requiredOperation, Operation candidateOperation)
 //			{	double elementCasePenalization=0;
 //				Type returnTypeRO= requiredOperation.getResponse().getType();
 //				Type returnTypeCO= candidateOperation.getResponse().getType();
 //				if (returnTypeRO.getElementsNumber()<=returnTypeCO.getElementsNumber()){
 //
 //					elementCasePenalization= ELEMENT_NUMBER_PENALIZATION*(returnTypeCO.getElementsNumber() - returnTypeRO.getElementsNumber());
-//					
+//
 //					double[][] matrizNombreCampos;
 //					double[][] matrizTipoCampos;
 //					//calcularemos compatibildad de nombres de todos los elements del tipo complejo
@@ -886,7 +855,7 @@ public class SemanticInterfaceCompatibility {
 //					double[][] matricesMultiplicadas=multiplicarEscalares(matrizNombreCampos, matrizTipoCampos);
 //					//obtengo la mejor asignaci�n entre las combinaciones
 //					int[][] resultCampos = HungarianAlgorithm.hgAlgorithm(matricesMultiplicadas, "max");
-//									
+//
 //					//Recorre la matriz resultCampos para ver qu�est�devolviendo
 //					/*
 //					for (int j=0; j<resultCampos.length; j++)
@@ -898,13 +867,13 @@ public class SemanticInterfaceCompatibility {
 //					double sum =0;
 //					for (int j=0; j<resultCampos.length; j++)
 //						sum = sum + matricesMultiplicadas[resultCampos[j][0]][resultCampos[j][1]];
-//	
+//
 //					double ret = (sum/returnTypeRO.getElementsNumber()) - elementCasePenalization;
 //					////System.out.println(ret);
 //					return ret;
 //				}
 //				else return 0;
-//				
+//
 //			}
 		
 
@@ -962,10 +931,6 @@ public class SemanticInterfaceCompatibility {
 				ArrayList<Attribute> elementsC1Param= requiredType.getElements();
 				ArrayList<Attribute> elementsC2Param= candidateType.getElements();
 				int elementsC1ParamSize,elementsC2ParamSize;
-				System.out.println("Nombre del tipo de atributo:"+ requiredType.getName());
-				System.out.println("Nombre del tipo de atributo:"+ candidateType.getName());
-				System.out.println("Elementos:"+ requiredType.getElements());
-				System.out.println("Elementos:"+ candidateType.getElements());
 				elementsC1ParamSize=elementsC1Param.size();
 				elementsC2ParamSize=elementsC2Param.size();
 				if (elementsC1ParamSize <= elementsC2ParamSize){
